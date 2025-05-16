@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'detection_screen.dart';
+import 'dashboard_screen.dart';
+
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -61,8 +63,10 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const DetectionScreen()),
+                          MaterialPageRoute(builder: (_) => const DashboardScreen()),
                         );
+
+                        
                       },
                       child: const Text('Log in'),
                     ),
