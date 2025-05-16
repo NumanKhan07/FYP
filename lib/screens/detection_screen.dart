@@ -6,7 +6,7 @@ class DetectionScreen extends StatefulWidget {
   const DetectionScreen({super.key});
 
   @override
-  State<DetectionScreen> createState() => _DetectionScreenState();
+  State<DetectionScreen> createState() => _DetectionScreenStat();
 }
 
 class _DetectionScreenState extends State<DetectionScreen> {
