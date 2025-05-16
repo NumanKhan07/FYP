@@ -10,7 +10,7 @@ class DetectionScreen extends StatefulWidget {
 }
 
 class _DetectionScreenState extends State<DetectionScreen> {
-  File? _image;
+  File? _imauge;
 
   Future<void> _pickImageFromGallery() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
