@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1056091707004",
-    "project_id": "tomatoblight-90b31",
-    "storage_bucket": "tomatoblight-90b31.firebasestorage.app"
+    "project_number": "206911962785",
+    "project_id": "tomato-17886",
+    "storage_bucket": "tomato-17886.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1056091707004:android:74d8fe2af49079b5161bf9",
+        "mobilesdk_app_id": "1:206911962785:android:f9bd7f4a5d28da47c83ae0",
         "android_client_info": {
           "package_name": "com.example.tomato_blight_app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD3FNJXhJQr_tJ6gBYLWtk6ARL46QRVMak"
+          "current_key": "AIzaSyBqZJK6vfXGEzxk7K987RTu9bxORPQSaUQ"
         }
       ],
       "services": {
