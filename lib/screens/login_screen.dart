@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_screen.dart';
 import 'dashboard_screen.dart';
+import 'welcome_screen.dart'; // ✅ NEW
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,21 +11,36 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
   bool _autoValidate = false;
   bool loading = false;
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+
+    _animationController.forward();
 
     _emailFocus.addListener(() {
       if (!_emailFocus.hasFocus) setState(() => _autoValidate = true);
@@ -37,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    _animationController.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
     emailController.dispose();
@@ -46,10 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) return 'Email cannot be empty';
-
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,4}$');
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$');
     if (!emailRegex.hasMatch(value)) return 'Enter a valid email address';
-
     return null;
   }
 
@@ -61,9 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _loginUser() async {
     setState(() => _autoValidate = true);
-
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => loading = true);
 
     try {
@@ -74,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+        MaterialPageRoute(builder: (_) => const WelcomeScreen()), // ✅ NEW
       );
     } on FirebaseAuthException catch (e) {
       String message = "Login failed.";
@@ -91,7 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _showForgotPasswordDialog() {
     final resetEmailController = TextEditingController();
-
     showDialog(
       context: context,
       builder: (context) {
@@ -151,13 +163,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icon(Icons.local_florist, color: Colors.white, size: 60),
                 SizedBox(height: 10),
                 Text(
-                  'Tomato Late Blight Detection',
+                  'Tomato Blight App',
                   style: TextStyle(color: Colors.white, fontSize: 22),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Detect and predict late blight in tomatoes\nbased on weather conditions.',
+                  'Weather + Image Based Detection & Prediction',
                   style: TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -166,55 +178,63 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Expanded(
             child: Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: isWideScreen ? screenWidth * 0.3 : 40),
-                child: Form(
-                  key: _formKey,
-                  autovalidateMode:
-                  _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
-                  child: Column(
-                    children: [
-                      const Text('Log in to your account', style: TextStyle(fontSize: 22)),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: emailController,
-                        focusNode: _emailFocus,
-                        decoration: const InputDecoration(labelText: 'Email'),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: _emailValidator,
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: passwordController,
-                        focusNode: _passwordFocus,
-                        decoration: const InputDecoration(labelText: 'Password'),
-                        obscureText: true,
-                        validator: _passwordValidator,
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: loading ? null : _loginUser,
-                          child: loading
-                              ? const CircularProgressIndicator(color: Colors.white)
-                              : const Text('Log in'),
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: isWideScreen ? screenWidth * 0.3 : 40),
+                  child: Form(
+                    key: _formKey,
+                    autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+                    child: Column(
+                      children: [
+                        const Text('Log in to your account', style: TextStyle(fontSize: 22)),
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          controller: emailController,
+                          focusNode: _emailFocus,
+                          decoration: const InputDecoration(labelText: 'Email'),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: _emailValidator,
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(onPressed: _showForgotPasswordDialog, child: const Text('Forgot password?')),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/signup');
-                            },
-                            child: const Text('Sign up'),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: passwordController,
+                          focusNode: _passwordFocus,
+                          decoration: const InputDecoration(labelText: 'Password'),
+                          obscureText: true,
+                          validator: _passwordValidator,
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: loading ? null : _loginUser,
+                            child: loading
+                                ? const CircularProgressIndicator(color: Colors.white)
+                                : const Text('Log in'),
                           ),
-                        ],
-                      )
-                    ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: _showForgotPasswordDialog,
+                              child: const Text('Forgot password?'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const SignUpScreen()),
+                                );
+                              },
+                              child: const Text('Sign up'),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

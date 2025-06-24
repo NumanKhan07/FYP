@@ -41,10 +41,35 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
 
+          // ✅ Replaced "Profile Info" with Custom "About"
           ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Profile Info'),
-            onTap: () {},
+            leading: const Icon(Icons.info_outline),
+            title: const Text('About'),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('About This App'),
+                  content: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Smart Tomato Disease & Weather Alert App'),
+                      SizedBox(height: 12),
+                      Text('• Detects Early Blight and Late Blight using tomato leaf images.'),
+                      Text('• Uses weather data (temperature & humidity) to predict risk.'),
+                      Text('• Helps farmers take preventive actions early.'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Close'),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
 
           ListTile(

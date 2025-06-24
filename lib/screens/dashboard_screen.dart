@@ -49,7 +49,7 @@ class DashboardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // 📷 Detect Disease
+            // Detect Disease Card
             Card(
               elevation: 3,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -59,10 +59,10 @@ class DashboardScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: const [
-                        Icon(Icons.document_scanner_outlined, size: 40, color: Colors.green),
-                        SizedBox(width: 12),
-                        Expanded(
+                      children: [
+                        Icon(Icons.eco_outlined, size: 40, color: Colors.green),
+                        const SizedBox(width: 12),
+                        const Expanded(
                           child: Text(
                             "Detect Disease",
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -95,7 +95,7 @@ class DashboardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // 📅 Detection History
+            // Detection History
             Card(
               elevation: 3,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -120,7 +120,7 @@ class DashboardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // 💡 Tomato Care Tip
+            // Tomato Care Tip
             Card(
               elevation: 3,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
